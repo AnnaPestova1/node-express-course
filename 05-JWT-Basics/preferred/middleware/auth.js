@@ -1,10 +1,10 @@
 const jwt = require("jsonwebtoken");
-const StatusError = require("../errors/error");
+const { UnAuth } = require("../errors/error");
 
 const authMiddleware = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    throw new StatusError("unauthorized", 401);
+    throw new UnAuth("unauthorized");
   }
   const token = authHeader.split(" ")[1];
   try {
@@ -12,7 +12,7 @@ const authMiddleware = async (req, res, next) => {
     req.user = { name: decoded.name };
     next();
   } catch (error) {
-    throw new StatusError("unauthorized", 401);
+    throw new UnAuth("unauthorized");
   }
 };
 
